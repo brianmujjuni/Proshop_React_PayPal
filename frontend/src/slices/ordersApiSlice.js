@@ -47,6 +47,7 @@ export const orderApiSlice = apiSlice.injectEndpoints({
         method: "PUT",
       }),
     }),
+    
   }),
 });
 
