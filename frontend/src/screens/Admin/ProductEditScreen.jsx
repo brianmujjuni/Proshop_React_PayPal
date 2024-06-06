@@ -1,5 +1,5 @@
-import { Link, useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Form, Button } from "react-bootstrap";
 import Message from "../../components/Message";
 import Loader from "../../components/Loader";
@@ -11,8 +11,9 @@ import {
   useUploadProductImageMutation,
 } from "../../slices/productsApiSlice";
 
-export default function ProductEditScreen() {
+const ProductEditScreen = () => {
   const { id: productId } = useParams();
+
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
   const [image, setImage] = useState("");
@@ -24,7 +25,7 @@ export default function ProductEditScreen() {
   const {
     data: product,
     isLoading,
-    refecth,
+    refetch,
     error,
   } = useGetProductDetailsQuery(productId);
 
@@ -36,17 +37,6 @@ export default function ProductEditScreen() {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (product) {
-      setName(product.name);
-      setPrice(product.price);
-      setImage(product.image);
-      setBrand(product.brand);
-      setCategory(product.category);
-      setCountInStock(product.countInStock);
-      setDescription(product.description);
-    }
-  }, [product]);
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
@@ -59,24 +49,36 @@ export default function ProductEditScreen() {
         category,
         description,
         countInStock,
-      });
-      toast.success("Product updated successfully");
+      }).unwrap(); // NOTE: here we need to unwrap the Promise to catch any rejection in our catch block
+      toast.success("Product updated");
+      refetch();
       navigate("/admin/productlist");
-    } catch (error) {
-      toast.error(error);
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
     }
   };
 
+  useEffect(() => {
+    if (product) {
+      setName(product.name);
+      setPrice(product.price);
+      setImage(product.image);
+      setBrand(product.brand);
+      setCategory(product.category);
+      setCountInStock(product.countInStock);
+      setDescription(product.description);
+    }
+  }, [product]);
+
   const uploadFileHandler = async (e) => {
-    const file = e.target.files[0];
-    const bodyFormData = new FormData();
-    bodyFormData.append("image", file);
+    const formData = new FormData();
+    formData.append("image", e.target.files[0]);
     try {
-      const res = await uploadProductImage(bodyFormData).unwrap();
+      const res = await uploadProductImage(formData).unwrap();
       toast.success(res.message);
       setImage(res.image);
-    } catch (error) {
-      toast.error(error?.data?.message || error.error);
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
     }
   };
 
@@ -91,19 +93,20 @@ export default function ProductEditScreen() {
         {isLoading ? (
           <Loader />
         ) : error ? (
-          <Message variant="danger">{error}</Message>
+          <Message variant="danger">{error.data.message}</Message>
         ) : (
           <Form onSubmit={submitHandler}>
-            <Form.Group controlId="name" className="my-2">
+            <Form.Group controlId="name">
               <Form.Label>Name</Form.Label>
-
               <Form.Control
+                type="name"
                 placeholder="Enter name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               ></Form.Control>
             </Form.Group>
-            <Form.Group controlId="price" className="my-2">
+
+            <Form.Group controlId="price">
               <Form.Label>Price</Form.Label>
               <Form.Control
                 type="number"
@@ -112,25 +115,24 @@ export default function ProductEditScreen() {
                 onChange={(e) => setPrice(e.target.value)}
               ></Form.Control>
             </Form.Group>
+
             <Form.Group controlId="image">
               <Form.Label>Image</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Enter image url"
                 value={image}
-                onChange={(e) => setImage}
+                onChange={(e) => setImage(e.target.value)}
               ></Form.Control>
               <Form.Control
-                type="file"
-                id="image-file"
                 label="Choose File"
-                custom
                 onChange={uploadFileHandler}
+                type="file"
               ></Form.Control>
               {loadingUpload && <Loader />}
             </Form.Group>
 
-            <Form.Group controlId="brand" className="my-2">
+            <Form.Group controlId="brand">
               <Form.Label>Brand</Form.Label>
               <Form.Control
                 type="text"
@@ -139,7 +141,8 @@ export default function ProductEditScreen() {
                 onChange={(e) => setBrand(e.target.value)}
               ></Form.Control>
             </Form.Group>
-            <Form.Group controlId="countInStock" className="my-2">
+
+            <Form.Group controlId="countInStock">
               <Form.Label>Count In Stock</Form.Label>
               <Form.Control
                 type="number"
@@ -148,7 +151,8 @@ export default function ProductEditScreen() {
                 onChange={(e) => setCountInStock(e.target.value)}
               ></Form.Control>
             </Form.Group>
-            <Form.Group controlId="category" className="my-2">
+
+            <Form.Group controlId="category">
               <Form.Label>Category</Form.Label>
               <Form.Control
                 type="text"
@@ -157,7 +161,8 @@ export default function ProductEditScreen() {
                 onChange={(e) => setCategory(e.target.value)}
               ></Form.Control>
             </Form.Group>
-            <Form.Group controlId="description" className="my-2">
+
+            <Form.Group controlId="description">
               <Form.Label>Description</Form.Label>
               <Form.Control
                 type="text"
@@ -166,7 +171,12 @@ export default function ProductEditScreen() {
                 onChange={(e) => setDescription(e.target.value)}
               ></Form.Control>
             </Form.Group>
-            <Button type="submit" variant="primary" className="my-3">
+
+            <Button
+              type="submit"
+              variant="primary"
+              style={{ marginTop: "1rem" }}
+            >
               Update
             </Button>
           </Form>
@@ -174,4 +184,6 @@ export default function ProductEditScreen() {
       </FormContainer>
     </>
   );
-}
+};
+
+export default ProductEditScreen;
