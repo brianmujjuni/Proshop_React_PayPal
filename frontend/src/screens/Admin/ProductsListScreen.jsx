@@ -11,8 +11,8 @@ import {
 } from "../../slices/productsApiSlice";
 
 export default function ProductsListScreen() {
-  const { data: products, isLoading, isError } = useGetProductsQuery();
-  const [createProduct, { isLoading: loadingCreate, refetch }] =
+  const { data: products, isLoading, isError, refetch } = useGetProductsQuery();
+  const [createProduct, { isLoading: loadingCreate }] =
     useCreateProductMutation();
   const [deleteProduct, { isLoading: loadingDelete }] =
     useDeleteProductMutation();
@@ -30,8 +30,8 @@ export default function ProductsListScreen() {
     if (window.confirm("Are you sure")) {
       try {
         await deleteProduct(id);
-        refetch();
         toast.success("Product deleted successfully");
+        refetch();
       } catch (err) {
         toast.error(err?.data?.message || err.error);
       }

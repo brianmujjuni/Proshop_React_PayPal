@@ -48,7 +48,9 @@ export const productsApiSlice = apiSlice.injectEndpoints({
         url: `${PRODUCTS_URL}/${productId}`,
         method: "DELETE",
       }),
+      providesTags: ["Product"],
     }),
+    
   }),
 });
 
@@ -58,5 +60,5 @@ export const {
   useCreateProductMutation,
   useUpdateProductMutation,
   useUploadProductImageMutation,
-  useDeleteProductMutation
+  useDeleteProductMutation,
 } = productsApiSlice;
