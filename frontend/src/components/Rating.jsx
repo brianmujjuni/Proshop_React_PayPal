@@ -48,7 +48,7 @@ export default function Rating({ value, text }) {
           <FaRegStar />
         )}
       </span>
-      <span className="rating-text">{text && text}"</span>
+      <span className="rating-text">{text && text}</span>
     </div>
   );
 }
