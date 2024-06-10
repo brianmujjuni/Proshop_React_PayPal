@@ -7,8 +7,11 @@ import Message from "../components/Message";
 import { useParams } from "react-router";
 
 export default function HomeScreen() {
-  const { pageNumber } = useParams();
-  const { data, isLoading, isError } = useGetProductsQuery({ pageNumber });
+  const { pageNumber, keyword } = useParams();
+  const { data, isLoading, isError } = useGetProductsQuery({
+    keyword,
+    pageNumber,
+  });
 
   return (
     <>
@@ -28,7 +31,11 @@ export default function HomeScreen() {
               </Col>
             ))}
           </Row>
-          <Paginate page={data.page} pages={data.pages} />
+          <Paginate
+            page={data.page}
+            pages={data.pages}
+            keyword={keyword ? keyword : ""}
+          />
         </>
       )}
     </>
