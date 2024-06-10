@@ -1,9 +1,11 @@
 import { Col, Row } from "react-bootstrap";
 import Product from "../components/Product";
+import Paginate from "../components/Paginate";
 import { useGetProductsQuery } from "../slices/productsApiSlice";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import { useParams } from "react-router";
+
 export default function HomeScreen() {
   const { pageNumber } = useParams();
   const { data, isLoading, isError } = useGetProductsQuery({ pageNumber });
@@ -25,8 +27,8 @@ export default function HomeScreen() {
                 <Product product={product} />
               </Col>
             ))}
-            <Col></Col>
           </Row>
+          <Paginate page={data.page} pages={data.pages} />
         </>
       )}
     </>
