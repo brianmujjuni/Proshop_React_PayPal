@@ -7,6 +7,7 @@ import Message from "../components/Message";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import ProductCarousel from "../components/ProductCarousel";
+import Meta from "../components/Meta";
 
 export default function HomeScreen() {
   const { pageNumber, keyword } = useParams();
@@ -32,6 +33,7 @@ export default function HomeScreen() {
         </Message>
       ) : (
         <>
+          <Meta />
           <h1>Latest Products</h1>
           <Row>
             {data.products.map((product) => (
