@@ -5,6 +5,7 @@ import { useGetProductsQuery } from "../slices/productsApiSlice";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import { useParams } from "react-router";
+import { Link } from "react-router-dom";
 
 export default function HomeScreen() {
   const { pageNumber, keyword } = useParams();
@@ -15,6 +16,11 @@ export default function HomeScreen() {
 
   return (
     <>
+      {keyword && (
+        <Link to="/" className="btn btn-light my-3">
+          Go Back
+        </Link>
+      )}
       {isLoading ? (
         <Loader />
       ) : isError ? (
