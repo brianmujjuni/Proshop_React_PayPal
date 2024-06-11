@@ -3,7 +3,7 @@ import { FaShoppingCart, FaUser } from "react-icons/fa";
 import { LinkContainer } from "react-router-bootstrap";
 import logo from "../assets/logo.png";
 import { useDispatch, useSelector } from "react-redux";
-import { useLoginMutation, useLogoutMutation } from "../slices/usersApiSlice";
+import { useLogoutMutation } from "../slices/usersApiSlice";
 import { logout } from "../slices/authSlice";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
