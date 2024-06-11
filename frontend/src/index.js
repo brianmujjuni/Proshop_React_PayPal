@@ -12,6 +12,7 @@ import store from "./store";
 import "./assets/styles/bootstrap.custom.css";
 import "./assets/styles/index.css";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+import { HelmentProvider } from "react-helmet-async";
 import App from "./App";
 import HomeScreen from "./screens/HomeScreen";
 import ProductScreen from "./screens/ProductScreen";
